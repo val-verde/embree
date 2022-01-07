@@ -30,10 +30,10 @@ namespace embree
   struct TaskScheduler
   {
     /*! initializes the task scheduler */
-    static void create(size_t numThreads, bool set_affinity, bool start_threads);
+    dll_export static void create(size_t numThreads, bool set_affinity, bool start_threads);
 
     /*! destroys the task scheduler again */
-    static void destroy();
+    dll_export static void destroy();
 
     /* returns the ID of the current thread */
     static __forceinline size_t threadID()
