@@ -222,7 +222,11 @@ namespace embree
     cpu_set_t set;
     CPU_ZERO(&set);
     
+  #ifdef __ANDROID__
+    if (sched_getaffinity(0, sizeof(set), &set) == 0)
+  #else
     if (pthread_getaffinity_np(pthread_self(), sizeof(set), &set) == 0)
+  #endif
     {
       for (int i=0, j=0; i<CPU_SETSIZE; i++)
       {
@@ -248,7 +252,11 @@ namespace embree
     size_t threadID = affinity;
     CPU_SET(threadID, &cset);
 
+  #ifdef __ANDROID__
+    sched_setaffinity(0, sizeof(cset), &cset);
+  #else
     pthread_setaffinity_np(pthread_self(), sizeof(cset), &cset);
+  #endif
   }
 }
 #endif
@@ -290,7 +298,11 @@ namespace embree
     CPU_ZERO(&cset);
     CPU_SET(affinity, &cset);
 
+  #ifdef __ANDROID__
+    sched_setaffinity(0, sizeof(cset), &cset);
+  #else
     pthread_setaffinity_np(pthread_self(), sizeof(cset), &cset);
+  #endif
   }
 }
 #endif
@@ -402,14 +414,22 @@ namespace embree
       CPU_ZERO(&cset);
       threadID = mapThreadID(threadID);
       CPU_SET(threadID, &cset);
+  #ifdef __ANDROID__
+      sched_setaffinity(0, sizeof(cset), &cset);
+  #else
       pthread_setaffinity_np(*tid, sizeof(cset), &cset);
+  #endif
     }
 #elif defined(__FreeBSD__)
     if (threadID >= 0) {
       cpuset_t cset;
       CPU_ZERO(&cset);
       CPU_SET(threadID, &cset);
+    #ifdef __ANDROID__
+      sched_setaffinity(0, sizeof(cset), &cset);
+    #else
       pthread_setaffinity_np(*tid, sizeof(cset), &cset);
+    #endif
     }
 #elif defined(__ANDROID__)
     if (threadID >= 0) {

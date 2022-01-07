@@ -670,7 +670,11 @@ namespace embree
     });
 #else
     cpu_set_t set;
+  #if defined(__ANDROID__)
+    if (sched_getaffinity(0, sizeof(set), &set) == 0)
+  #else
     if (pthread_getaffinity_np(pthread_self(), sizeof(set), &set) == 0)
+  #endif
       nThreads = CPU_COUNT(&set);
 #endif
     
