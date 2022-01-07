@@ -203,7 +203,7 @@ ENDIF()
 
 SET(CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo")
 
-IF (WIN32)
+IF (MSVC)
   IF (NOT DEFAULT_CMAKE_CONFIGURATION_TYPES_SET)
     SET(CMAKE_CONFIGURATION_TYPES "${CONFIGURATION_TYPES}" CACHE STRING "List of generated configurations." FORCE)
     SET(DEFAULT_CMAKE_CONFIGURATION_TYPES_SET ON CACHE INTERNAL "Default CMake configuration types set.")
@@ -239,7 +239,7 @@ IF (WIN32)
     INCLUDE (msvc)
   ENDIF()
 
-ELSE (WIN32)
+ELSE (MSVC)
   IF(CMAKE_CXX_COMPILER_WRAPPER STREQUAL "CrayPrgEnv")
     INCLUDE (crayprgenv)
   ELSE()
@@ -270,7 +270,7 @@ ELSE (WIN32)
   OPTION(CMAKE_VERBOSE_MAKEFILE "Enables verbose mode.")
   MARK_AS_ADVANCED(CLEAR CMAKE_VERBOSE_MAKEFILE)
 
-ENDIF (WIN32)
+ENDIF (MSVC)
 
 ##############################################################
 # ISA configuration
