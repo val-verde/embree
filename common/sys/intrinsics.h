@@ -89,7 +89,7 @@ namespace embree
 #endif
   }
   
-#if defined(__X86_64__)
+#if defined(__X86_64__) || defined(__aarch64__)
   __forceinline size_t bsf(size_t v) {
 #if defined(__AVX2__) 
     return _tzcnt_u64(v);
@@ -113,7 +113,7 @@ namespace embree
     return i;
   }
   
-#if defined(__X86_64__)
+#if defined(__X86_64__) || defined(__aarch64__)
   __forceinline size_t bscf(size_t& v) 
   {
     size_t i = bsf(v);
@@ -138,7 +138,7 @@ namespace embree
 #endif
   }
   
-#if defined(__X86_64__)
+#if defined(__X86_64__) || defined(__aarch64__)
   __forceinline size_t bsr(size_t v) {
 #if defined(__AVX2__) 
     return 63 -_lzcnt_u64(v);
@@ -170,7 +170,7 @@ namespace embree
     long r = v; _bittestandreset(&r,i); return r;
   }
   
-#if defined(__X86_64__)
+#if defined(__X86_64__) || defined(__aarch64__)
   
   __forceinline size_t btc(size_t v, size_t i) {
     size_t r = v; _bittestandcomplement64((__int64*)&r,i); return r;

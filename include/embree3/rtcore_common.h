@@ -12,7 +12,7 @@
 RTC_NAMESPACE_BEGIN
 
 #if defined(_WIN32)
-#if defined(_M_X64)
+#if defined(_M_X64) || defined(__aarch64__)
 typedef long long ssize_t;
 #else
 typedef int ssize_t;
