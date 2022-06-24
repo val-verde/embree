@@ -496,8 +496,10 @@ __forceinline size_t toSizeT(const vint4& v) {
 #elif defined(__ARM_NEON)
     // FIXME(LTE): Do we need a swap(i.e. use lane 1)?
     return vgetq_lane_u64(*(reinterpret_cast<const uint64x2_t *>(&v)), 0);
-#else
+#elif defined(__x86_64__)
     return _mm_cvtsi128_si64(v); 
+#else
+    return toScalar(v);
 #endif
   }
 #endif
