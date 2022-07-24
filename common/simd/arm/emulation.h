@@ -23,8 +23,10 @@ __forceinline __m128 _mm_broadcast_ss (float const * mem_addr)
     return vdupq_n_f32(*mem_addr);
 }
 
+#if defined(__aarch64__)
 // AVX2 emulation leverages Intel FMA defs above.  Include after them.
 #include "avx2neon.h"
+#endif
 
 /* Dummy defines for floating point control */
 #define _MM_MASK_MASK 0x1f80
