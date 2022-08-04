@@ -1733,7 +1733,11 @@ FORCE_INLINE __m128 _mm_div_ss(__m128 a, __m128 b)
 // https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_free
 FORCE_INLINE void _mm_free(void *addr)
 {
+#ifdef _WIN32
+    _aligned_free(addr);
+#else
     free(addr);
+#endif
 }
 
 // Macro: Get the flush zero bits from the MXCSR control and status register.
@@ -1918,9 +1922,14 @@ FORCE_INLINE __m128i _mm_loadu_si64(const void *p)
 //         cpp-compiler-developer-guide-and-reference-allocating-and-freeing-aligned-memory-blocks
 FORCE_INLINE void *_mm_malloc(size_t size, size_t align)
 {
+#ifdef _WIN32
+#define posix_memalign(p, a, s) (((*(p)) = _aligned_malloc((s), (a))), *(p) ?0 :errno)
+#endif
     void *ptr;
+#ifndef _WIN32
     if (align == 1)
         return malloc(size);
+#endif
     if (align == 2 || (sizeof(void *) == 8 && align == 4))
         align = sizeof(void *);
     if (!posix_memalign(&ptr, align, size))
